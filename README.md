@@ -13,5 +13,7 @@ neptune.py net -i <ip-address> -p <final port of diapazon(1-n)>(default 65535)
 ```
 
 <i>Updates are planned... | Намечаются некоторые обновления.....OK!</i>
+
 <b>Author: Kamran Pulatov</b>
+
 <i>Kamran Pulatov (c) 2022</i>
