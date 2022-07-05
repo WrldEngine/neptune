@@ -1,6 +1,6 @@
 # Neptune
 Net Testing Tool
 <br/>
-<b>How to use</b>
+# How to use
 <br/>
 ``` neptune.py net -i <ip-address> -e <finally number of range>(default 255) ```
