@@ -1,4 +1,4 @@
 # Neptune
 Net Testing Tool
 USAGE:
-``` neptune.py net -i <ip-address> -e <end point of IP address>(default 255) ```
+``` neptune.py net -i <ip-address> -e <finally number of range>(default 255) ```
