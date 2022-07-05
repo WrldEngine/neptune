@@ -11,3 +11,5 @@ Scanning open ports of domain / IP address
 ```
 neptune.py net -i <ip-address> -p <final port of diapazone(1-n)>(default 65535)
 ```
+
+Kamran Pulatov (c) 2022
