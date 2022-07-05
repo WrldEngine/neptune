@@ -1,6 +1,13 @@
 # Neptune
 Net Testing Tool
 <br/>
-<b>How to use: </b>
-<br/>
-<code>neptune.py net -i <ip-address> -e <finally number of range>(default 255)</code>
+## Usage
+Scanning the range of IP addresses
+```
+neptune.py net -i <ip-address> -e <final number of range>(default 255)
+```
+
+Scanning open ports of domain / IP address
+```
+neptune.py net -i <ip-address> -p <final port of diapazone(1-n)>(default 65535)
+```
