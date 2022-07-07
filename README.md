@@ -12,7 +12,7 @@ Scanning open ports of domain / IP address
 neptune.py net -i <ip-address> -p <final port of diapazon(1-n)>(default 65535)
 ```
 
-<i>Updates are planned... | Намечаются некоторые обновления.....OK!</i>
+<i>The program is still in development / Please, wait new updates!</i>
 
 <b>Author: Kamran Pulatov</b>
 
