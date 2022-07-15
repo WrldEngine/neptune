@@ -22,4 +22,3 @@ neptune.py comm -i <ip-address> -c <device's port>
 <b>Author: Kamran Pulatov</b>
 
 <i>Kamran Pulatov (c) 2022</i>
-![photo_2021-07-26_20-57-30](https://user-images.githubusercontent.com/84636918/179263533-59ab41d7-2c2e-4606-aa54-3f6f3f23db51.jpg)
