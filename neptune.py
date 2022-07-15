@@ -11,17 +11,17 @@ import threading
 from colorama import init, Fore, Back, Style
 
 init()
-RESET = Fore.RESET
-MAGENTA = Fore.MAGENTA
-YELLOW = Fore.YELLOW
-RED = Fore.RED
-BLACK = Fore.BLACK
+RESET     = Fore.RESET
+MAGENTA   = Fore.MAGENTA
+YELLOW    = Fore.YELLOW
+RED       = Fore.RED
+BLACK     = Fore.BLACK
 
-bg_reset = Back.RESET
-bg_red = Back.RED
+bg_reset  = Back.RESET
+bg_red    = Back.RED
 bg_yellow = Back.YELLOW
-bg_white = Back.WHITE
-bg_mag = Back.MAGENTA
+bg_white  = Back.WHITE
+bg_mag    = Back.MAGENTA
 
 bnnr = f"""{MAGENTA}
  _   _            _                    
@@ -115,10 +115,10 @@ if args.action == 'port':
     print(f"{RED}RANGE: 1 --> {port}{RESET}")
 
     start = time.time()
-    z = len(mainf(ip_org, ports))
-    print(f"{YELLOW}-{RESET}" * z)
+    
+    print("")
     mainf(ip_org, ports)
-    print(f"{YELLOW}---------------{RESET}")
+    print("")
 
     total = time.time() - start
     print(f"{RED}Scanning time: %s sec{RESET}" % (round(total),))
@@ -149,13 +149,19 @@ elif args.action == 'comm':
     host = args.host 
     port = args.port
 
-    print(f"{YELLOW}Connection to {host}:{port} ---{RESET}")
+    print(f"{YELLOW}Connection to {host}:{port} ---{RESET}\n")
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, int(port)))
-    data = s.recv(4096)
-    print(data)
-    while len(data) != 0:
-        n = input()
-        s.sendall(n.encode())
+    echo = s.recv(4096)
+    print(echo)
+    try:
+        while len(echo) != 0:
+            n = input()
+            s.sendall(n.encode())
+
+            data = s.recv(4096)
+            print(data)
+    except ConnectionAbortedError as e:
+        print(f"\n{RED}Connection aborted{RESET}")
     s.close()
