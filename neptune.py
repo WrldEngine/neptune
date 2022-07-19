@@ -16,6 +16,7 @@ MAGENTA   = Fore.MAGENTA
 YELLOW    = Fore.YELLOW
 RED       = Fore.RED
 BLACK     = Fore.BLACK
+GREEN     = Fore.GREEN
 
 bg_reset  = Back.RESET
 bg_red    = Back.RED
@@ -47,13 +48,17 @@ net_scan = subparsers.add_parser('net', help='End point of range IP addresses')
 net_scan.add_argument("-i", dest="tar", help="IP address")
 net_scan.add_argument("-e", default="255", dest="end", help="End point of range IP addresses")
 
-port_scan = subparsers.add_parser('port', help='Scanning open ports of domain')
+port_scan = subparsers.add_parser('ports', help='Scanning open ports of domain')
 port_scan.add_argument("-i", dest="ip", help="Scanning open ports of domain")
 port_scan.add_argument("-p", default="65535", dest="range", help="End point of range ports")
 
 sender = subparsers.add_parser('comm', help='Connecting and sending requests to device')
 sender.add_argument("-i", dest="host", help="IP address of domain/device")
 sender.add_argument("-c", dest="port", help="Domain's/devise's port")
+
+open_port = subparsers.add_parser('op', help='Checking port of address')
+open_port.add_argument("-i", dest="addr", help="IP address")
+open_port.add_argument("-p", dest="endport", help="Port")
 
 args = parser.parse_args()
 
@@ -62,7 +67,17 @@ try:
 except IndexError as e:
     parser.print_help()
     sys.exit()
-    
+
+def scan_port_of_domain(ip, port):
+    s = socket.socket()
+    try:
+        s.connect((ip, int(port)))
+    except socket.error:
+        print(f"{RED}[-] {YELLOW}{ip}:{port}{RESET}{RED} - {YELLOW}CLOSED{RESET}")
+    else:
+        s.close()
+        print(f"{GREEN}[+] {YELLOW}{ip}:{port}{RESET}{GREEN} - {YELLOW}OPEN{RESET}")
+
 def scan_Ip(ip):
     addr = net + str(ip)
     param = '-n' if name=='nt' else '-c'
@@ -103,7 +118,7 @@ def port_scan(port):
     finally:
         s.close()
 
-if args.action == 'port':
+if args.action == 'ports':
     ip = args.ip
     port = args.range
     ip_org = socket.gethostbyname(ip)
@@ -165,3 +180,19 @@ elif args.action == 'comm':
     except ConnectionAbortedError as e:
         print(f"\n{RED}Connection aborted{RESET}")
     s.close()
+
+elif args.action == 'op':
+    print(bnnr)
+    target = args.addr
+    port = args.endport
+
+    ip = socket.gethostbyname(target)
+    host = socket.getfqdn(ip)
+
+    print(f"{RED}IP: {YELLOW}{ip}{RESET}{RED}, HOST:{YELLOW}{host}{RESET}\n")
+    start = time.time()
+
+    scan_port_of_domain(ip, port)
+    
+    total = time.time() - start
+    print(f"\n{RED}Scanning time: %s sec{RESET}" % (round(total),))
