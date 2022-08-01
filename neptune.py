@@ -1,14 +1,14 @@
-import socket
-import time
 from threading import Thread, Lock
 from queue import Queue
+from colorama import init, Fore, Back, Style
+import socket
+import time
 import argparse
 import requests
 import os
 import subprocess
 import sys
 import threading
-from colorama import init, Fore, Back, Style
 
 init()
 RESET     = Fore.RESET
@@ -79,12 +79,11 @@ def scan_port_of_domain(ip, port):
         print(f"{GREEN}[+] {YELLOW}{ip}:{port}{RESET}{GREEN} - {YELLOW}OPEN{RESET}")
 
 def scan_Ip(ip):
-    addr = net + str(ip)
     param = '-n' if name=='nt' else '-c'
-    command = ['ping', param, '1', addr]
+    command = ['ping', param, '1', ip]
     result = subprocess.run(command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, creationflags=0x08000000)
     if result.returncode == 0 and b'TTL=' in result.stdout:
-        print(f"{YELLOW}[+] - {addr:13} - ON{RESET}")
+        print(f"{YELLOW}[+] - {ip:13} - ON{RESET}")
 
 def mainf(host, ports):
     global q
@@ -140,22 +139,26 @@ if args.action == 'ports':
 
 elif args.action == 'net':
     print(bnnr)
+
+    my_local_ip = socket.gethostbyname(socket.gethostname())
     net = str(args.tar)
-    net_split = net.split('.')
-    a = '.'
-    net = net_split[0] + a + net_split[1] + a + net_split[2] + a
-    start_point = net_split[3]
+    start_ip = net.split('.')
+
+    point = '.'
+    start_ip_lst = start_ip[0] + point + start_ip[1] + point + start_ip[2] + point
     end_point = args.end
+    lst_ip = [start_ip_lst + str(i) for i in range(int(end_point) - int(start_ip[3]))]
+    lst_ip.remove(my_local_ip) 
 
-    print(f"{RED}Started range {YELLOW}{net+f'{start_point}'}{RESET}{RED} --> {YELLOW}{net+f'{end_point}'}{RESET}\n")
+    print(f"{RED}Started range {YELLOW}{net}{RESET}{RED} --> {YELLOW}{start_ip_lst+f'{end_point}'}{RESET}\n")
     start = time.time()
-    for ip in range(int(start_point), int(end_point)):
-        if ip == int(net_split[3]):
-           continue
-        potoc = threading.Thread(target=scan_Ip, args=[ip])
-        potoc.start()
 
-    potoc.join()
+    if my_local_ip != '127.0.0.1':
+        for host in lst_ip:
+            flood = threading.Thread(target=scan_Ip, args=[host]).start()
+    else:
+        print("Please check your network connection")
+
     total = time.time() - start
     print(f"\n{RED}Scanning time: %s sec{RESET}" % (round(total),))
 
@@ -168,15 +171,19 @@ elif args.action == 'comm':
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, int(port)))
-    echo = s.recv(4096)
-    print(echo)
+    
+    echo = s.recv(4096).decode()
+    print( echo if len(echo)!=0 else '')
     try:
-        while len(echo) != 0:
+        while True:
             n = input()
             s.sendall(n.encode())
 
             data = s.recv(4096)
-            print(data)
+            try:
+                print(data.decode())
+            except:
+                print(data)
     except ConnectionAbortedError as e:
         print(f"\n{RED}Connection aborted{RESET}")
     s.close()
