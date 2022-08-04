@@ -81,8 +81,8 @@ def scan_port_of_domain(ip, port):
 def scan_Ip(ip):
     param = '-n' if name=='nt' else '-c'
     command = ['ping', param, '1', ip]
-    result = subprocess.run(command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, creationflags=0x08000000)
-    if result.returncode == 0 and b'TTL=' in result.stdout:
+    result = subprocess.run(command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    if result.returncode == 0 and b'ttl=' in result.stdout.lower():
         print(f"{YELLOW}[+] - {ip:13} - ON{RESET}")
 
 def mainf(host, ports):
